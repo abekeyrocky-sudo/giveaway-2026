@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Giveaway Pro Mini App</title>
+    <!-- Modern Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+    <!-- Custom Toast Notification -->
+    <div id="toast" class="toast hidden">Message</div>
+
+    <!-- Onboarding / Loading Screen -->
+    <div id="onboarding-screen" class="screen">
+        <div class="loader-container">
+            <div class="avatar-ring">
+                <img id="welcome-avatar" src="https://via.placeholder.com/100" alt="Avatar">
+            </div>
+            <h1 id="welcome-name">Loading...</h1>
+            <p>Preparing your premium experience</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- Main App Screen -->
+    <div id="main-screen" class="screen hidden">
+        <!-- Floating Header Area -->
+        <div class="header-wrapper">
+            <header class="glass-header">
+                <div class="user-profile" onclick="openModal('profile-modal')">
+                    <img id="user-photo" src="https://via.placeholder.com/50" alt="Profile">
+                    <div class="user-info">
+                        <h3 id="display-name">User</h3>
+                        <div class="ticket-badge">
+                            <span class="orange-text">🎫</span> <span id="user-tickets" class="ticket-count">0</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="action-btn orange-btn" onclick="openModal('referral-modal')">
+                    Invite
+                </button>
+            </header>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-box" placeholder="Search amazing giveaways..." oninput="filterGiveaways(event)">
+                </div>
+            </div>
+
+            <!-- Modern Tabs -->
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('active', this)">🔥 Active</button>
+                    <button class="tab-btn" onclick="switchTab('upcoming', this)">⏳ Upcoming</button>
+                    <button class="tab-btn" onclick="switchTab('past', this)">🏆 Winners</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <main id="giveaway-list" class="giveaway-container">
+            <!-- Cards will be injected here via JS -->
+        </main>
+    </div>
+
+    <!-- Bottom Sheet: Giveaway Details -->
+    <div id="giveaway-modal" class="bottom-sheet hidden">
+        <div class="sheet-overlay" onclick="closeModal('giveaway-modal')"></div>
+        <div class="sheet-content">
+            <div class="drag-handle"></div>
+            <h2 id="modal-title" class="sheet-title">Giveaway Title</h2>
+            <p id="modal-desc" class="sheet-desc">Complete the following steps to secure your entry!</p>
+            
+            <div class="tasks-box">
+                <button class="task-btn" id="task-tg" onclick="doTask('tg', 'https://t.me/telegram')">
+                    <span class="task-icon">📢</span> Join Telegram Channel
+                    <div class="task-status"></div>
+                </button>
+                <button class="task-btn" id="task-tw" onclick="doTask('tw', 'https://twitter.com')">
+                    <span class="task-icon">🐦</span> Follow on X
+                    <div class="task-status"></div>
+                </button>
+                <button class="task-btn" id="task-yt" onclick="doTask('yt', 'https://youtube.com')">
+                    <span class="task-icon">📺</span> Watch YouTube Video
+                    <div class="task-status"></div>
+                </button>
+            </div>
+
+            <button id="join-btn" class="primary-btn green-btn" disabled>Verify & Join</button>
+        </div>
+    </div>
+
+    <!-- Bottom Sheet: Profile -->
+    <div id="profile-modal" class="bottom-sheet hidden">
+        <div class="sheet-overlay" onclick="closeModal('profile-modal')"></div>
+        <div class="sheet-content center-content">
+            <div class="drag-handle"></div>
+            <div class="profile-lg-img">
+                <img id="profile-modal-img" src="https://via.placeholder.com/100" alt="Profile">
+            </div>
+            <h2 id="profile-name" class="sheet-title">Profile Name</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-icon orange-text">🎫</span>
+                    <h3 id="profile-tickets">0</h3>
+                    <p>Tickets</p>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon green-text">👥</span>
+                    <h3 id="profile-invites">0</h3>
+                    <p>Invites</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Sheet: Referral -->
+    <div id="referral-modal" class="bottom-sheet hidden">
+        <div class="sheet-overlay" onclick="closeModal('referral-modal')"></div>
+        <div class="sheet-content center-content">
+            <div class="drag-handle"></div>
+            <div class="referral-icon orange-text">🎁</div>
+            <h2 class="sheet-title">Invite Friends</h2>
+            <p class="sheet-desc">Get <b class="orange-text">2 Extra Tickets</b> for every friend who joins using your link!</p>
+            
+            <div class="referral-box">
+                <input type="text" id="ref-link" readonly>
+                <button class="copy-btn green-btn" onclick="copyRefLink()">Copy</button>
+            </div>
+            <p class="stats">Total Successful Invites: <span id="invite-count" class="orange-text bold">0</span></p>
+        </div>
+    </div>
+
+    <!-- JS Files -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
